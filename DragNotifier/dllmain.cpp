@@ -101,6 +101,10 @@ STDAPI DllUnregisterServer() {
         status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, handlerKeyName.c_str(), 0, 0);
         winrt::check_win32(status);
 
+        auto serverKeyName = L"CLSID\\"s + factoryGuidStr + L"\\InprocServer32";
+        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, serverKeyName.c_str(), 0, 0);
+        winrt::check_win32(status);
+
         auto clsidKeyName = L"CLSID\\"s + factoryGuidStr;
         status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, clsidKeyName.c_str(), 0, 0);
         winrt::check_win32(status);
