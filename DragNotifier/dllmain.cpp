@@ -62,23 +62,24 @@ _Use_decl_annotations_ STDAPI DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFII
 STDAPI DllRegisterServer() {
     try
     {
-        wchar_t factory_guid_str[wil::guid_string_buffer_length];
-        if (!StringFromGUID2(__uuidof(CDragNotifierFactory), factory_guid_str, ARRAYSIZE(factory_guid_str)))
+        wchar_t factoryGuidStr[wil::guid_string_buffer_length];
+        if (!StringFromGUID2(__uuidof(CDragNotifierFactory), factoryGuidStr, ARRAYSIZE(factoryGuidStr)))
             winrt::throw_hresult(E_OUTOFMEMORY);
 
         {
-            auto clsidkeyname = L"CLSID\\"s + factory_guid_str;
-            auto clsidkey = wil::reg::create_unique_key(HKEY_CLASSES_ROOT, clsidkeyname.c_str(), wil::reg::key_access::readwrite);
+            auto clsidKeyName = L"CLSID\\"s + factoryGuidStr;
+            auto clsidKey = wil::reg::create_unique_key(HKEY_CLASSES_ROOT, clsidKeyName.c_str(), wil::reg::key_access::readwrite);
             {
-                auto server = wil::reg::create_unique_key(clsidkey.get(), L"InprocServer32", wil::reg::key_access::readwrite);
+                auto server = wil::reg::create_unique_key(clsidKey.get(), L"InprocServer32", wil::reg::key_access::readwrite);
                 auto path = wil::GetModuleFileNameW<std::wstring>(g_hInstance);
                 wil::reg::set_value_string(server.get(), NULL, path.c_str());
                 wil::reg::set_value_string(server.get(), L"ThreadingModel", L"Apartment");
             }
         }
         {
-            auto handler = wil::reg::create_unique_key(HKEY_CLASSES_ROOT, L"Directory\\shellex\\CopyHookHandlers\\DragNotifier", wil::reg::key_access::readwrite);
-            wil::reg::set_value_string(handler.get(), NULL, factory_guid_str);
+            auto handlerKeyName = L"Directory\\shellex\\CopyHookHandlers\\"s + factoryGuidStr;
+            auto handler = wil::reg::create_unique_key(HKEY_CLASSES_ROOT, handlerKeyName.c_str(), wil::reg::key_access::readwrite);
+            wil::reg::set_value_string(handler.get(), NULL, factoryGuidStr);
         }
 
         return S_OK;
@@ -92,15 +93,16 @@ STDAPI DllUnregisterServer() {
     try {
         LSTATUS status;
 
-        wchar_t factory_guid_str[wil::guid_string_buffer_length];
-        if (!StringFromGUID2(__uuidof(CDragNotifierFactory), factory_guid_str, ARRAYSIZE(factory_guid_str)))
+        wchar_t factoryGuidStr[wil::guid_string_buffer_length];
+        if (!StringFromGUID2(__uuidof(CDragNotifierFactory), factoryGuidStr, ARRAYSIZE(factoryGuidStr)))
             winrt::throw_hresult(E_OUTOFMEMORY);
 
-        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, L"Directory\\shellex\\CopyHookHandlers\\DragNotifier", 0, 0);
+        auto handlerKeyName = L"Directory\\shellex\\CopyHookHandlers\\"s + factoryGuidStr;
+        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, handlerKeyName.c_str(), 0, 0);
         winrt::check_win32(status);
 
-        auto clsidkeyname = L"CLSID\\"s + factory_guid_str;
-        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, clsidkeyname.c_str(), 0, 0);
+        auto clsidKeyName = L"CLSID\\"s + factoryGuidStr;
+        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, clsidKeyName.c_str(), 0, 0);
         winrt::check_win32(status);
 
         return S_OK;

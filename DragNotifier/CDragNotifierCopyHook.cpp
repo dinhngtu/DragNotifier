@@ -33,8 +33,7 @@ IFACEMETHODIMP_(UINT) CDragNotifierCopyHook::CopyCallback(
             if (srcpath.stem() == DRAGNOTIFIER_PREFIX) {
                 auto hwndString = srcpath.extension().wstring();
                 if (hwndString.length() > 1) {
-                    hwndString = hwndString.substr(1);
-                    auto hwndDest = reinterpret_cast<HWND>(std::stoull(hwndString));
+                    auto hwndDest = reinterpret_cast<HWND>(std::stoull(hwndString.substr(1)));
                     auto dest = dstpath.parent_path();
                     f = fmt::format(L"hwnd: {:#x}, path: {}", (uintptr_t)hwndDest, dest.wstring());
                     OutputDebugStringW(f.c_str());
