@@ -96,11 +96,11 @@ STDAPI DllUnregisterServer() {
         if (!StringFromGUID2(__uuidof(CDragNotifierFactory), factory_guid_str, ARRAYSIZE(factory_guid_str)))
             winrt::throw_hresult(E_OUTOFMEMORY);
 
-        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, L"Directory\\shellex\\CopyHookHandlers\\DragNotifier", KEY_WOW64_64KEY, 0);
+        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, L"Directory\\shellex\\CopyHookHandlers\\DragNotifier", 0, 0);
         winrt::check_win32(status);
 
         auto clsidkeyname = L"CLSID\\"s + factory_guid_str;
-        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, clsidkeyname.c_str(), KEY_WOW64_64KEY, 0);
+        status = RegDeleteKeyExW(HKEY_CLASSES_ROOT, clsidkeyname.c_str(), 0, 0);
         winrt::check_win32(status);
 
         return S_OK;
