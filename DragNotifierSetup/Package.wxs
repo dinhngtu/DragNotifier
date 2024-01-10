@@ -4,7 +4,7 @@
   <Package
     Name="Fast Drag for NanaZip"
     Manufacturer="Dinh Ngoc Tu"
-    Version="1.0.0.0"
+    Version="1.0.1.0"
     UpgradeCode="d8556e63-83f8-4fe7-8f30-4ebe1060e7a8"
     Scope="perUserOrMachine">
     <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
