@@ -1,8 +1,10 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
+/*
 #include <wil/registry.h>
 #include <wil/win32_helpers.h>
 #include <wil/stl.h>
+*/
 #include "CDragNotifierCopyHook.hpp"
 
 HINSTANCE g_hInstance = NULL;
@@ -59,6 +61,7 @@ _Use_decl_annotations_ STDAPI DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFII
     }
 }
 
+/*
 STDAPI DllRegisterServer() {
     try
     {
@@ -118,3 +121,4 @@ STDAPI DllUnregisterServer() {
         return winrt::to_hresult();
     }
 }
+*/
