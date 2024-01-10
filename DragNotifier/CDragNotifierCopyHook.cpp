@@ -27,8 +27,10 @@ IFACEMETHODIMP_(UINT) CDragNotifierCopyHook::CopyCallback(
                     if (SUCCEEDED(StringCchCopyW(&data.filename[0], ARRAYSIZE(data.filename), dest.c_str()))) {
                         COPYDATASTRUCT cds{ DRAGNOTIFIER_COPY, sizeof(DragNotifierCopyData), &data };
                         DWORD_PTR res;
-                        if (SendMessageTimeoutW(hwndDest, WM_COPYDATA, reinterpret_cast<WPARAM>(hwnd), reinterpret_cast<LPARAM>(&cds), SMTO_ABORTIFHUNG, 1000, &res) && res)
-                            return IDNO;
+                        // we can't use PostMessage since the copydata message needs to stay alive during the send
+                        SendMessageTimeoutW(hwndDest, WM_COPYDATA, reinterpret_cast<WPARAM>(hwnd), reinterpret_cast<LPARAM>(&cds), SMTO_ABORTIFHUNG, 100, &res);
+                        // but it doesn't matter if the caller returns or not
+                        return IDNO;
                     }
                 }
             }

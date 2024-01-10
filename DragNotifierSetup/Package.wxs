@@ -27,12 +27,15 @@
   <Fragment>
     <ComponentGroup Id="DragNotifierComponents" Directory="INSTALLFOLDER64">
       <Component Bitness="always64">
-        <File Source="$(var.SolutionDir)\x64\Release\DragNotifier.dll" />
+        <File Source="$(SolutionDir)\$(Platform)\$(Configuration)\DragNotifier.dll" />
       </Component>
       <Component Bitness="always64">
-        <RegistryKey Root="HKCR" Key="CLSID\{D8D7AC18-961F-4CE0-99AF-CF471B87ECA0}\InprocServer32">
-          <RegistryValue Value="[!DragNotifier.dll]" />
-          <RegistryValue Name="ThreadingModel" Value="Apartment" />
+        <RegistryKey Root="HKCR" Key="CLSID\{D8D7AC18-961F-4CE0-99AF-CF471B87ECA0}">
+          <RegistryValue Value="!(bind.Property.ProductName)" />
+          <RegistryKey Key="InprocServer32">
+            <RegistryValue Value="[INSTALLFOLDER64]DragNotifier.dll" />
+            <RegistryValue Name="ThreadingModel" Value="Apartment" />
+          </RegistryKey>
         </RegistryKey>
       </Component>
       <Component Bitness="always64">
