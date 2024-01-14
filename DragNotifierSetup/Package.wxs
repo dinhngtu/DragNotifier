@@ -1,10 +1,10 @@
-﻿<Wix
+<Wix
   xmlns="http://wixtoolset.org/schemas/v4/wxs"
   xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
   <Package
     Name="Fast Drag for NanaZip"
     Manufacturer="Dinh Ngoc Tu"
-    Version="1.0.1.0"
+    Version="1.0.2.0"
     UpgradeCode="d8556e63-83f8-4fe7-8f30-4ebe1060e7a8"
     Scope="perUserOrMachine">
     <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
@@ -14,8 +14,6 @@
     <Feature Id="Main">
       <ComponentGroupRef Id="DragNotifierComponents" />
     </Feature>
-
-    <ui:WixUI Id="WixUI_Minimal" InstallDirectory="INSTALLFOLDER64" />
   </Package>
 
   <Fragment>
@@ -28,15 +26,7 @@
     <ComponentGroup Id="DragNotifierComponents" Directory="INSTALLFOLDER64">
       <Component Bitness="always64">
         <File Source="$(SolutionDir)\$(Platform)\$(Configuration)\DragNotifier.dll" />
-      </Component>
-      <Component Bitness="always64">
-        <RegistryKey Root="HKCR" Key="CLSID\{D8D7AC18-961F-4CE0-99AF-CF471B87ECA0}">
-          <RegistryValue Value="!(bind.Property.ProductName)" />
-          <RegistryKey Key="InprocServer32">
-            <RegistryValue Value="[INSTALLFOLDER64]DragNotifier.dll" />
-            <RegistryValue Name="ThreadingModel" Value="Apartment" />
-          </RegistryKey>
-        </RegistryKey>
+        <Class Id="{D8D7AC18-961F-4CE0-99AF-CF471B87ECA0}" Context="InprocServer32" ThreadingModel="apartment" Advertise="yes" />
       </Component>
       <Component Bitness="always64">
         <RegistryKey Root="HKCR" Key="Directory\shellex\CopyHookHandlers\{D8D7AC18-961F-4CE0-99AF-CF471B87ECA0}">
